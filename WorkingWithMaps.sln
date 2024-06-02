@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.34902.97
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkingWithMaps.Android", "WorkingWithMaps.Android\WorkingWithMaps.Android.csproj", "{A81D3C7B-C0CD-4BB1-BF9E-C34BB1996E2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkingWithMaps", "WorkingWithMaps\WorkingWithMaps.csproj", "{6E95A1EF-0926-4D98-AF1D-035D4DC3960B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A81D3C7B-C0CD-4BB1-BF9E-C34BB1996E2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A81D3C7B-C0CD-4BB1-BF9E-C34BB1996E2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A81D3C7B-C0CD-4BB1-BF9E-C34BB1996E2A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{A81D3C7B-C0CD-4BB1-BF9E-C34BB1996E2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A81D3C7B-C0CD-4BB1-BF9E-C34BB1996E2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A81D3C7B-C0CD-4BB1-BF9E-C34BB1996E2A}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{6E95A1EF-0926-4D98-AF1D-035D4DC3960B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E95A1EF-0926-4D98-AF1D-035D4DC3960B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E95A1EF-0926-4D98-AF1D-035D4DC3960B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{6E95A1EF-0926-4D98-AF1D-035D4DC3960B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E95A1EF-0926-4D98-AF1D-035D4DC3960B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E95A1EF-0926-4D98-AF1D-035D4DC3960B}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {284A11EC-4005-46BE-BEE0-FD49E430BBF2}
+	EndGlobalSection
+EndGlobal

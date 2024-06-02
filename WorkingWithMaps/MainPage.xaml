@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:WorkingWithMaps"
+             mc:Ignorable="d"
+             x:Class="WorkingWithMaps.MainPage"
+             Title="Меню Карт"
+             Padding="10">
+    <StackLayout>
+        <Label Text="Меню Карт"
+               FontSize="Large"
+               HorizontalOptions="Center"
+               Margin="0,20,0,10"
+               TextColor="#2c3e50"/>
+
+        <CollectionView ItemsSource="{Binding MenuItems}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="10" Margin="5" BackgroundColor="#ecf0f1" CornerRadius="10" HasShadow="True">
+                        <StackLayout Orientation="Horizontal">
+                            <Image Source="{Binding Icon}" WidthRequest="40" HeightRequest="40" VerticalOptions="Center" />
+                            <StackLayout Orientation="Vertical" Padding="10,0">
+                                <Label Text="{Binding Title}" FontSize="Medium" FontAttributes="Bold" TextColor="#34495e"/>
+                                <Label Text="{Binding Description}" FontSize="Small" TextColor="#7f8c8d" />
+                            </StackLayout>
+                        </StackLayout>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type local:MainPage}}, Path=BindingContext.NavigateCommand}" CommandParameter="{Binding PageType}" />
+                        </Frame.GestureRecognizers>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
+</ContentPage>

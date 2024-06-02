@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             x:Class="WorkingWithMaps.PinPage"
+             Title="Пины">
+    <StackLayout Margin="10">
+        <maps:Map x:Name="map" MapClicked="OnMapClicked" HeightRequest="300">
+            <maps:Map.Pins>
+                <maps:Pin Label="Санта-Крус"
+                          Address="Город с набережной"
+                          Type="Place">
+                    <maps:Pin.Position>
+                        <maps:Position>
+                            <x:Arguments>
+                                <x:Double>36.9628066</x:Double>
+                                <x:Double>-122.0194722</x:Double>
+                            </x:Arguments>
+                        </maps:Position>
+                    </maps:Pin.Position>
+                </maps:Pin>
+            </maps:Map.Pins>
+        </maps:Map>
+        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="10">
+            <Button Text="Удалить все пины" Clicked="OnRemovePinsClicked" />
+            <Button Text="Добавить стандартные пины" Clicked="OnAddPinsClicked" />
+        </StackLayout>
+        <Label Text="Список пинов:" FontSize="Medium" TextColor="#34495e" HorizontalOptions="Center" />
+        <ListView x:Name="pinsListView" HeightRequest="200">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextCell Text="{Binding Label}" Detail="{Binding Address}" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+</ContentPage>
