@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             x:Class="WorkingWithMaps.MapRegionPage"
+             Title="Демонстрация регионов карты">
+    <StackLayout Margin="10">
+        <maps:Map x:Name="map"
+                  MapClicked="OnMapClicked">
+            <x:Arguments>
+                <maps:MapSpan>
+                    <x:Arguments>
+                        <maps:Position>
+                            <x:Arguments>
+                                <x:Double>55.7558</x:Double>
+                                <x:Double>37.6173</x:Double>
+
+                            </x:Arguments>
+                        </maps:Position>
+                        <x:Double>0.1</x:Double>
+                        <x:Double>0.1</x:Double>
+                    </x:Arguments>
+                </maps:MapSpan>
+            </x:Arguments>
+        </maps:Map>
+    </StackLayout>
+</ContentPage>

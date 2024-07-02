@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             xmlns:vm="clr-namespace:WorkingWithMaps.ViewModels"
+             x:Class="WorkingWithMaps.Views.RouteMapPage"
+             Title="Карта маршрута">
+
+    <ContentPage.BindingContext>
+        <vm:RouteMapViewModel />
+    </ContentPage.BindingContext>
+
+    <StackLayout Padding="10">
+        <Label Text="Начальный адрес:" />
+        <Entry Placeholder="Введите начальный адрес" Text="{Binding StartAddress}" />
+
+        <Label Text="Конечный адрес:" />
+        <Entry Placeholder="Введите конечный адрес" Text="{Binding EndAddress}" />
+
+        <Button Text="Построить маршрут" Command="{Binding BuildRouteCommand}" />
+
+        <Button Text="Очистить маршрут" Command="{Binding ClearRouteCommand}" />
+
+        <ActivityIndicator IsVisible="{Binding IsLoading}" IsRunning="{Binding IsLoading}" />
+
+        <maps:Map x:Name="routeMap"
+                  MapType="Street"
+                  IsShowingUser="True"
+                  HasScrollEnabled="True"
+                  HasZoomEnabled="True"
+                  VerticalOptions="FillAndExpand" />
+    </StackLayout>
+</ContentPage>
