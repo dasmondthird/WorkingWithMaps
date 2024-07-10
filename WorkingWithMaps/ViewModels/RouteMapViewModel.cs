@@ -1,120 +1,100 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WorkingWithMaps.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
-using WorkingWithMaps.Models;
-using WorkingWithMaps.Services;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using System;
 
 namespace WorkingWithMaps.ViewModels
 {
-    public class RouteMapViewModel : INotifyPropertyChanged
+    public class RouteMapViewModel : BindableObject
     {
-        private string _startAddress;
-        private string _endAddress;
-        private Polyline _route;
-        private bool _isLoading;
+        private readonly RouteService _routeService;
+        private string _origin;
+        private string _destination;
 
-        public string StartAddress
+        public ObservableCollection<Position> RoutePositions { get; }
+        public ICommand FetchRouteCommand { get; }
+
+        public string Origin
         {
-            get => _startAddress;
+            get => _origin;
             set
             {
-                _startAddress = value;
-                OnPropertyChanged(nameof(StartAddress));
+                _origin = value;
+                OnPropertyChanged();
             }
         }
 
-        public string EndAddress
+        public string Destination
         {
-            get => _endAddress;
+            get => _destination;
             set
             {
-                _endAddress = value;
-                OnPropertyChanged(nameof(EndAddress));
+                _destination = value;
+                OnPropertyChanged();
             }
         }
-
-        public Polyline Route
-        {
-            get => _route;
-            set
-            {
-                _route = value;
-                OnPropertyChanged(nameof(Route));
-            }
-        }
-
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set
-            {
-                _isLoading = value;
-                OnPropertyChanged(nameof(IsLoading));
-            }
-        }
-
-        public ICommand BuildRouteCommand { get; }
-        public ICommand ClearRouteCommand { get; }
 
         public RouteMapViewModel()
         {
-            BuildRouteCommand = new Command(async () => await BuildRoute());
-            ClearRouteCommand = new Command(ClearRoute);
+            _routeService = (RouteService)App.ServiceProvider.GetService(typeof(RouteService));
+            RoutePositions = new ObservableCollection<Position>();
+            FetchRouteCommand = new Command(async () => await FetchRouteAsync());
         }
 
-        private async Task BuildRoute()
+        private async Task FetchRouteAsync()
         {
-            IsLoading = true;
-            var startPosition = await GeocodeAddressAsync(StartAddress);
-            var endPosition = await GeocodeAddressAsync(EndAddress);
-
-            if (startPosition == null || endPosition == null)
+            var routeJson = await _routeService.GetRouteAsync(Origin, Destination);
+            var routeObject = JObject.Parse(routeJson);
+            var points = routeObject["routes"][0]["overview_polyline"]["points"].ToString();
+            var positions = DecodePolyline(points);
+            RoutePositions.Clear();
+            foreach (var position in positions)
             {
-                IsLoading = false;
-                await App.Current.MainPage.DisplayAlert("Error", "Invalid start or end address", "OK");
-                return;
+                RoutePositions.Add(position);
             }
+        }
 
-            var routePositions = await RouteBuilder.GetRouteAsync(startPosition, endPosition);
-            Route = new Polyline
-            {
-                StrokeColor = Color.Blue,
-                StrokeWidth = 5
-            };
+        private IEnumerable<Position> DecodePolyline(string encodedPoints)
+        {
+            if (string.IsNullOrWhiteSpace(encodedPoints))
+                yield break;
 
-            foreach (var position in routePositions)
+            int index = 0, lat = 0, lng = 0;
+
+            while (index < encodedPoints.Length)
             {
-                Route.Geopath.Add(position);
+                int b, shift = 0, result = 0;
+                do
+                {
+                    b = encodedPoints[index++] - 63;
+                    result |= (b & 0x1f) << shift;
+                    shift += 5;
+                } while (b >= 0x20);
+
+                int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+                lat += dlat;
+
+                shift = 0;
+                result = 0;
+                do
+                {
+                    b = encodedPoints[index++] - 63;
+                    result |= (b & 0x1f) << shift;
+                    shift += 5;
+                } while (b >= 0x20);
+
+                int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+                lng += dlng;
+
+                yield return new Position(
+                    Convert.ToDouble(lat) / 1E5,
+                    Convert.ToDouble(lng) / 1E5);
             }
-
-            IsLoading = false;
-            MessagingCenter.Send(this, "UpdateRoute", Route);
-        }
-
-        private void ClearRoute()
-        {
-            Route = null;
-            StartAddress = string.Empty;
-            EndAddress = string.Empty;
-            MessagingCenter.Send(this, "ClearRoute");
-        }
-
-        private async Task<Position> GeocodeAddressAsync(string address)
-        {
-            var geoCoder = new Geocoder();
-            var positions = await geoCoder.GetPositionsForAddressAsync(address);
-            return positions.FirstOrDefault();
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

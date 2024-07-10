@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Xamarin.Forms;
-using WorkingWithMaps.Views;
 
 namespace WorkingWithMaps
 {
@@ -16,8 +15,15 @@ namespace WorkingWithMaps
             InitializeComponent();
             NavigateCommand = new Command<Type>(async (Type pageType) =>
             {
-                Page page = (Page)Activator.CreateInstance(pageType);
-                await Navigation.PushAsync(page);
+                try
+                {
+                    Page page = (Page)Activator.CreateInstance(pageType);
+                    await Navigation.PushAsync(page);
+                }
+                catch (Exception ex)
+                {
+                    LogException("Navigation", ex);
+                }
             });
 
             MenuItems = new ObservableCollection<MenuItem>
@@ -26,11 +32,21 @@ namespace WorkingWithMaps
                 new MenuItem { Title = "Карта", Description = "Отображение карты с другими свойствами.", Icon = "map_icon.png", PageType = typeof(MapPropertiesPage) },
                 new MenuItem { Title = "Пины", Description = "Добавление пинов на карту.", Icon = "pin_icon.png", PageType = typeof(PinPage) },
                 new MenuItem { Title = "Пины с привязкой данных", Description = "Добавление коллекции пинов на карту.", Icon = "pin_bind_icon.png", PageType = typeof(PinItemsSourcePage) },
-                new MenuItem { Title = "Геокодер", Description = "Геокодирование и обратное геокодирование адреса.", Icon = "geocoder_icon.png", PageType = typeof(GeocoderPage) },
-                new MenuItem { Title = "Маршруты", Description = "Управление и отображение маршрутов на карте.", Icon = "route_icon.png", PageType = typeof(RouteMapPage) }
+                new MenuItem { Title = "Маршруты", Description = "Управление и отображение маршрутов на карте.", Icon = "route_icon.png", PageType = typeof(RoutePage) }
             };
 
             BindingContext = this;
+        }
+
+        private void LogException(string context, Exception ex)
+        {
+            Console.WriteLine($"Error during {context}: {ex.Message}");
+            Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+            if (ex.InnerException != null)
+            {
+                Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+                Console.WriteLine($"Inner Exception Stack Trace: {ex.InnerException.StackTrace}");
+            }
         }
     }
 

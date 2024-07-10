@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
@@ -9,7 +11,6 @@ namespace WorkingWithMaps
         public MapPropertiesPage()
         {
             InitializeComponent();
-
             scrollEnabledCheckBox.CheckedChanged += OnCheckBoxCheckedChanged;
             zoomEnabledCheckBox.CheckedChanged += OnCheckBoxCheckedChanged;
             moveRegionCheckBox.CheckedChanged += OnCheckBoxCheckedChanged;
@@ -27,20 +28,40 @@ namespace WorkingWithMaps
             switch (checkBox.StyleId)
             {
                 case "scrollEnabledCheckBox":
-                    map.HasScrollEnabled = !map.HasScrollEnabled;
+                    map.HasScrollEnabled = scrollEnabledCheckBox.IsChecked;
                     break;
                 case "zoomEnabledCheckBox":
-                    map.HasZoomEnabled = !map.HasZoomEnabled;
+                    map.HasZoomEnabled = zoomEnabledCheckBox.IsChecked;
                     break;
                 case "showUserCheckBox":
-                    map.IsShowingUser = !map.IsShowingUser;
+                    map.IsShowingUser = showUserCheckBox.IsChecked;
                     break;
                 case "showTrafficCheckBox":
-                    map.TrafficEnabled = !map.TrafficEnabled;
+                    map.TrafficEnabled = showTrafficCheckBox.IsChecked;
                     break;
                 case "moveRegionCheckBox":
-                    map.MoveToLastRegionOnLayoutChange = !map.MoveToLastRegionOnLayoutChange;
+                    map.MoveToLastRegionOnLayoutChange = moveRegionCheckBox.IsChecked;
                     break;
+            }
+        }
+
+        void OnAddCircleClicked(object sender, EventArgs e)
+        {
+            if (double.TryParse(circleRadiusEntry.Text, out double radius))
+            {
+                var circle = new Circle
+                {
+                    Center = map.VisibleRegion.Center,
+                    Radius = new Distance(radius),
+                    StrokeColor = Color.Blue,
+                    StrokeWidth = 2,
+                    FillColor = Color.FromRgba(0, 0, 255, 32)
+                };
+                map.MapElements.Add(circle);
+            }
+            else
+            {
+                DisplayAlert("Ошибка", "Некорректный радиус", "Ок");
             }
         }
     }
