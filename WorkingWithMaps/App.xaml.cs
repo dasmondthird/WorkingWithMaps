@@ -20,7 +20,7 @@ namespace WorkingWithMaps
         private void ConfigureServices()
         {
             var services = new ServiceCollection();
-            services.AddSingleton<RouteService>(provider => new RouteService("AIzaSyCLW5ILryG1X42xxJxMZtw1r4jbEEEXVhQ"));
+            services.AddSingleton<RouteService>(provider => new RouteService(""));
             services.AddTransient<RouteMapViewModel>();
             ServiceProvider = services.BuildServiceProvider();
         }
